@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+  {% block content %}
+    {% for post in posts.items%}
+    <!-- <br> -->
+    <div class="row mt-3 mb-3">
+        <div class="col-12">
+          <div class="card-body border border-primary rounded-lg" style="background-color:#FFFFFF">
+          <article class="media content-section">
+            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}" alt="">
+            <div class="media-body ml-2">
+              <div class="article-metadata border-bottom">
+                <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username) }}" style='text-decoration: none'>
+                  {{ post.author.username}}</a>
+                <small class="text-muted "> {{ post.date_posted.strftime('%Y-%m-%d')}}</small>
+              </div>
+              <h2><a href="{{ url_for('posts.post', post_id=post.id) }}" style='text-decoration: none' class="article-title">{{ post.title }}</a> </h2>
+              <p class="article-content">{{ post.content}}</p>
+            </div>
+          </article>
+          </div>
+        </div>
+    </div>
+    {%endfor%}
+    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2)%}
+    {% if page_num %}
+      {% if posts.page == page_num %}
+        <a href="{{ url_for('main.home', page=page_num) }}" class="btn btn-info mb-4" style='text-decoration: none' >{{ page_num }}</a>
+      {% else %}
+        <a href="{{ url_for('main.home', page=page_num) }}" class="btn btn-outline-info mb-4" style='text-decoration: none' >{{ page_num }}</a>
+      {% endif %}
+    {% else %}
+      ...
+    {% endif %}
+    {%endfor%}
+  {% endblock content %}
